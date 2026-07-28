@@ -1,10 +1,21 @@
 # 🛒 Agente Inteligente - Mercado Central 24h
-
-Agente de inteligencia artificial que responde preguntas en lenguaje natural sobre el inventario de **Mercado Central 24h**, un supermercado de operación continua. Permite a cualquier persona colaboradora consultar stock, precios, proveedores y vencimientos sin abrir manualmente el archivo de inventario.
-
 > Proyecto desarrollado como parte del **Challenge Alura Agente** — Programa ONE Agentes + AluraLatam.
 
----
+<div align="center">
+	<h3>Plataforma interactiva para consultas en lenguaje natural sobre inventarios de supermercado</h3>
+	<p>
+		Consulta stock, precios, proveedores y vencimientos de forma inmediata con Inteligencia Artificial.
+	</p>
+
+<img alt="Python" src="https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white" />
+<img alt="Streamlit" src="https://img.shields.io/badge/Streamlit-1.40+-FF4B4B?logo=streamlit&logoColor=white" />
+<img alt="LangChain" src="https://img.shields.io/badge/LangChain-Experimental-1C3C3C?logo=chainlink&logoColor=white" />
+<img alt="Google Gemini" src="https://img.shields.io/badge/Google%20Gemini-3.5%20Flash--Lite-4285F4?logo=googlegemini&logoColor=white" />
+<img alt="Pandas" src="https://img.shields.io/badge/Pandas-Dataframe-150458?logo=pandas&logoColor=white" />
+
+</div>
+
+
 
 ## 📋 Descripción general
 
@@ -121,8 +132,13 @@ La app se abrirá automáticamente en `http://localhost:8501`.
 
 ## ☁️ Evidencia del Deploy
 
-- 🔗 **Aplicación desplegada:** [https://agente-inventario-mercado-central.streamlit.app](https://agente-inventario-mercado-central.streamlit.app)
-- 📸 **Captura de pantalla:** Guardada en `assets/deploy-screenshot.png`.
+- 🔗 **Aplicación desplegada:** [https://agente-inventario-mercado-central-ema.streamlit.app/](https://agente-inventario-mercado-central-ema.streamlit.app/)
+
+### 📸 Capturas de la Aplicación en Producción
+
+![Interfaz de Chat Streamlit en Producción](assets/home.png)
+
+![Demostración de Respuesta en Producción](assets/chat.png)
 
 ## 📌 Notas del proyecto
 

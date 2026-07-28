@@ -98,8 +98,20 @@ if pregunta:
 
     with st.chat_message("assistant"):
         with st.spinner("Pensando..."):
+            # Construir contexto con el historial reciente (últimos 3 intercambios)
+            historial_reciente = st.session_state.messages[-7:-1]  # excluye la pregunta actual
+            contexto = ""
+            if historial_reciente:
+                contexto = "Contexto de la conversación previa:\n"
+                for msg in historial_reciente:
+                    rol = "Usuario" if msg["role"] == "user" else "Asistente"
+                    contexto += f"{rol}: {msg['content']}\n"
+                contexto += "\nNueva pregunta (puede referirse al contexto anterior): "
+
+            entrada_completa = contexto + pregunta
+
             try:
-                respuesta = agent.invoke({"input": pregunta})
+                respuesta = agent.invoke({"input": entrada_completa})
                 raw_output = respuesta["output"] if isinstance(respuesta, dict) else respuesta
 
                 # Gemini 3.x puede devolver una lista de bloques estructurados en vez de un string plano
