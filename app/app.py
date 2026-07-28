@@ -45,23 +45,30 @@ df = load_data(DATA_PATH)
 with st.expander("Ver muestra del dataset"):
     st.dataframe(df.head(10))
 
-# --- Construcción del agente con soporte de modelos ---
+# --- Construcción del agente con modelos Gemini 3.x vigentes ---
+MODELOS_CANDIDATOS = [
+    "gemini-3.5-flash-lite",  # más rápido y económico, ideal para capa gratuita
+    "gemini-3.6-flash",       # más nuevo, más capaz
+    "gemini-2.5-flash-lite",  # respaldo adicional
+]
+
 @st.cache_resource
 def get_agent(_df, _api_key):
-    model_candidates = ["gemini-1.5-flash", "gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.0-flash", "gemini-2.5-flash"]
     llm = None
-    for m in model_candidates:
+    for modelo in MODELOS_CANDIDATOS:
         try:
-            llm = ChatGoogleGenerativeAI(
-                model=m,
+            cand = ChatGoogleGenerativeAI(
+                model=modelo,
                 api_key=_api_key,
                 temperature=0,
             )
+            cand.invoke("test")
+            llm = cand
             break
         except Exception:
             continue
     if not llm:
-        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", api_key=_api_key, temperature=0)
+        llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash-lite", api_key=_api_key, temperature=0)
 
     return create_pandas_dataframe_agent(
         llm,

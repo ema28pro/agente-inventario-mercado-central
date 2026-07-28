@@ -24,7 +24,7 @@ Usuario (navegador)
         ├──► Pandas DataFrame (inventario.xlsx cargado en memoria)
         │
         ▼
-  LLM: Google Gemini (gemini-1.5-flash / gemini-flash-latest)
+  LLM: Google Gemini (gemini-3.5-flash-lite / gemini-3.6-flash)
         │
         ▼
   Respuesta en lenguaje natural
@@ -34,7 +34,7 @@ Usuario (navegador)
 1. El archivo `inventario.xlsx` se carga en un DataFrame de Pandas al iniciar la app.
 2. El usuario escribe una pregunta en la interfaz de chat de Streamlit.
 3. LangChain usa un **pandas dataframe agent**, que traduce la pregunta en operaciones sobre el DataFrame (filtros, agregaciones, ordenamientos) ejecutando código Python internamente.
-4. El LLM (Gemini) interpreta el resultado y genera una respuesta en lenguaje natural.
+4. El LLM (Gemini 3.5 Flash-Lite / 3.6 Flash) interpreta el resultado y genera una respuesta en lenguaje natural.
 5. La respuesta se muestra en la interfaz interactiva del chat.
 
 > **¿Por qué un pandas agent y no RAG con embeddings?** El documento fuente es tabular (no texto libre), así que un agente que razona directamente sobre la tabla es más preciso y rápido que fragmentar el archivo en chunks vectorizados. Esto es una decisión de arquitectura justificada por el tipo de dato, no un atajo.
@@ -45,7 +45,7 @@ Usuario (navegador)
 |---|---|
 | Lenguaje | Python 3.11+ |
 | Orquestación del agente | LangChain (`langchain-experimental`) |
-| Modelo de lenguaje | Google Gemini 1.5 Flash / Gemini Flash Latest |
+| Modelo de lenguaje | Google Gemini 3.5 Flash-Lite / Gemini 3.6 Flash (familia Gemini 3.x vigente) |
 | Procesamiento de datos | Pandas |
 | Interfaz | Streamlit |
 | Deploy | Streamlit Community Cloud |
