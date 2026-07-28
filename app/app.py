@@ -11,6 +11,18 @@ st.set_page_config(page_title="Agente Inteligente - Mercado Central 24h", page_i
 st.title("🛒 Agente Inteligente - Mercado Central 24h")
 st.caption("Hazme preguntas en lenguaje natural sobre el inventario del supermercado.")
 
+# --- Carga defensiva de la API Key ---
+# Prioridad: variable de entorno / secrets de Streamlit > input manual
+api_key = os.getenv("GOOGLE_API_KEY") or st.secrets.get("GOOGLE_API_KEY", None) if hasattr(st, "secrets") else os.getenv("GOOGLE_API_KEY")
+
+if not api_key:
+    api_key = st.text_input("Ingresa tu Google API Key (Gemini)", type="password")
+
+if not api_key:
+    st.info("Necesitas una API Key de Gemini para continuar. Consíguela gratis en https://aistudio.google.com/apikey")
+    st.stop()
+
+# --- Carga del dataset ---
 DATA_PATH = os.path.join(os.path.dirname(__file__), "inventario.xlsx")
 
 @st.cache_data
@@ -25,7 +37,7 @@ def load_data(path):
     return df
 
 if not os.path.exists(DATA_PATH):
-    st.error(f"No se encontró el archivo de datos en: {DATA_PATH}.")
+    st.error(f"No se encontró el archivo de datos en: {DATA_PATH}. Súbelo a la carpeta 'app/' con el nombre 'inventario.xlsx'.")
     st.stop()
 
 df = load_data(DATA_PATH)
@@ -33,15 +45,24 @@ df = load_data(DATA_PATH)
 with st.expander("Ver muestra del dataset"):
     st.dataframe(df.head(10))
 
-api_key = os.getenv("GOOGLE_API_KEY")
-
+# --- Construcción del agente con soporte de modelos ---
 @st.cache_resource
 def get_agent(_df, _api_key):
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
-        google_api_key=_api_key,
-        temperature=0,
-    )
+    model_candidates = ["gemini-1.5-flash", "gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.0-flash", "gemini-2.5-flash"]
+    llm = None
+    for m in model_candidates:
+        try:
+            llm = ChatGoogleGenerativeAI(
+                model=m,
+                api_key=_api_key,
+                temperature=0,
+            )
+            break
+        except Exception:
+            continue
+    if not llm:
+        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", api_key=_api_key, temperature=0)
+
     return create_pandas_dataframe_agent(
         llm,
         _df,
@@ -53,6 +74,7 @@ def get_agent(_df, _api_key):
 
 agent = get_agent(df, api_key)
 
+# --- Historial de chat ---
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
