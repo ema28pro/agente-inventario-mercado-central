@@ -100,7 +100,19 @@ if pregunta:
         with st.spinner("Pensando..."):
             try:
                 respuesta = agent.invoke({"input": pregunta})
-                salida = respuesta["output"] if isinstance(respuesta, dict) else str(respuesta)
+                raw_output = respuesta["output"] if isinstance(respuesta, dict) else respuesta
+
+                # Gemini 3.x puede devolver una lista de bloques estructurados en vez de un string plano
+                if isinstance(raw_output, list):
+                    salida = " ".join(
+                        block.get("text", "") for block in raw_output
+                        if isinstance(block, dict) and block.get("type") == "text"
+                    ).strip()
+                else:
+                    salida = str(raw_output)
+
+                if not salida:
+                    salida = "No obtuve una respuesta de texto clara del modelo."
             except Exception as e:
                 salida = f"Ocurrió un error al procesar la pregunta: {e}"
             st.markdown(salida)
