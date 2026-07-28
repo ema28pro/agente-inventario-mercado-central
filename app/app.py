@@ -15,7 +15,14 @@ DATA_PATH = os.path.join(os.path.dirname(__file__), "inventario.xlsx")
 
 @st.cache_data
 def load_data(path):
-    return pd.read_excel(path)
+    if path.endswith(".xlsx"):
+        df = pd.read_excel(path)
+    else:
+        df = pd.read_csv(path)
+    for col in df.columns:
+        if "vencimiento" in col.lower():
+            df[col] = pd.to_datetime(df[col], errors="coerce")
+    return df
 
 if not os.path.exists(DATA_PATH):
     st.error(f"No se encontró el archivo de datos en: {DATA_PATH}.")
@@ -41,6 +48,7 @@ def get_agent(_df, _api_key):
         verbose=True,
         allow_dangerous_code=True,
         agent_type="tool-calling",
+        prefix="Eres un asistente inteligente experto en gestión de inventarios para el supermercado Mercado Central 24h. Responde siempre en español de forma clara, directa y concisa a partir del dataframe de pandas proporcionado.",
     )
 
 agent = get_agent(df, api_key)
