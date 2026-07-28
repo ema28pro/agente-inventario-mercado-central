@@ -71,8 +71,7 @@ agente-inventario-mercado-central/
 │   └── inventario.xlsx     # Dataset fuente de 200 productos
 ├── docs/
 │   └── ejemplos.md         # Registro completo de preguntas y respuestas reales
-├── assets/
-│   └── deploy-screenshot.png  # Captura de pantalla del despliegue en producción
+├── assets/                 # Capturas de pantalla del despliegue en producción
 ├── requirements.txt        # Dependencias de Python
 ├── .env.example            # Plantilla para variables de entorno
 ├── .gitignore              # Configuración de archivos excluidos de Git
